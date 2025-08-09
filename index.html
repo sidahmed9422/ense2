@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sélection des Matières avec Priorité - Enseignants</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-box {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .priority-explanation {
+            background: linear-gradient(45deg, #e67e22, #d35400);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .priority-explanation h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .priority-explanation ul {
+            margin-left: 20px;
+        }
+
+        .priority-explanation li {
+            margin-bottom: 5px;
+        }
+
+        .teacher-info-section {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.2);
+        }
+
+        .teacher-info-section h2 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 1.1em;
+        }
+
+        .teacher-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.95);
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .teacher-input:focus {
+            outline: none;
+            border-color: #27ae60;
+            background: white;
+            box-shadow: 0 5px 20px rgba(39, 174, 96, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .semester {
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+        }
+
+        .semester h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .subject-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .subject-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1em;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .subject-code {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .hours-info {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .hour-item {
+            background: #ecf0f1;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #2c3e50;
+        }
+
+        .selection-options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .priority-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            background: #f8f9fa;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .priority-container:hover {
+            background: #e9ecef;
+            transform: scale(1.05);
+        }
+
+        .priority-container.selected {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .priority-select {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 80px;
+        }
+
+        .priority-container.selected .priority-select {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: white;
+        }
+
+        .checkbox-label {
+            font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .summary {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .summary h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .counter {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .priority-list {
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .priority-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .priority-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .priority-1 { background: #e74c3c; }
+        .priority-2 { background: #f39c12; }
+        .priority-3 { background: #f1c40f; }
+        .priority-4 { background: #2ecc71; }
+        .priority-5 { background: #3498db; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .success-message, .error-message {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .success-message {
+            background: #27ae60;
+            color: white;
+        }
+
+        .error-message {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Sélection des Matières avec Priorité</h1>
+        
+        <div class="info-box">
+            Sélectionnez vos matières préférées et classez-les par ordre de priorité (1 = le plus important).
+        </div>
+
+        <div class="priority-explanation">
+            <h3>🏆 Comment fonctionne le système de priorité ?</h3>
+            <ul>
+                <li><strong>Priorité 1 (Rouge)</strong> : Matières que vous souhaitez absolument enseigner</li>
+                <li><strong>Priorité 2 (Orange)</strong> : Matières qui vous intéressent beaucoup</li>
+                <li><strong>Priorité 3 (Jaune)</strong> : Matières que vous acceptez volontiers</li>
+                <li><strong>Priorité 4 (Vert)</strong> : Matières que vous pouvez enseigner si nécessaire</li>
+                <li><strong>Priorité 5 (Bleu)</strong> : Derniers choix</li>
+            </ul>
+        </div>
+
+        <form id="selectionForm">
+            <!-- Section Informations Enseignant -->
+            <div class="teacher-info-section">
+                <h2>👨‍🏫 Informations de l'Enseignant</h2>
+                <div class="input-group">
+                    <label for="teacherName" class="input-label">Nom complet *</label>
+                    <input type="text" id="teacherName" name="teacherName" class="teacher-input" 
+                           placeholder="Entrez votre nom complet" required>
+                </div>
+                <div class="input-group">
+                    <label for="teacherEmail" class="input-label">Email *</label>
+                    <input type="email" id="teacherEmail" name="teacherEmail" class="teacher-input" 
+                           placeholder="votre.email@exemple.com" required>
+                </div>
+            </div>
+
+            <!-- Semestre 3 -->
+            <div class="semester">
+                <h2>📚 L3 MA Semestre 3</h2>
+                
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-name">Algèbre 3</div>
+                        <div class="subject-code">UEF311</div>
+                    </div>
+                    <div class="hours-info">
+                        <div class="hour-item">Cours: 1h30</div>
+                        <div class="hour-item">TD: 1h30</div>
+                        <div class="hour-item">TP: 0h</div>
+                    </div>
+                    <div class="selection-options">
+                        <div class="priority-container" onclick="togglePriority(this, 'Algèbre 3 - Cours')">
+                            <label class="checkbox-label">Cours</label>
+                            <select class="priority-select" onclick="event.stopPropagation()">
+                                <option value="">--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="priority-container" onclick="togglePriority(this, 'Algèbre 3 - TD')">
+                            <label class="checkbox-label">TD</label>
+                            <select class="priority-select" onclick="event.stopPropagation()">
+                                <option value="">--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-name">Analyse 3</div>
+                        <div class="subject-code">UEF312</div>
+                    </div>
+                    <div class="hours-info">
+                        <div class="hour-item">Cours: 1h30</div>
+                        <div class="hour-item">TD: 1h30</div>
+                        <div class="hour-item">TP: 0h</div>
+                    </div>
+                    <div class="selection-options">
+                        <div class="priority-container" onclick="togglePriority(this, 'Analyse 3 - Cours')">
+                            <label class="checkbox-label">Cours</label>
+                            <select class="priority-select" onclick="event.stopPropagation()">
+                                <option value="">--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="priority-container" onclick="togglePriority(this, 'Analyse 3 - TD')">
+                            <label class="checkbox-label">TD</label>
+                            <select class="priority-select" onclick="event.stopPropagation()">
+                                <option value="">--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-name">Probabilités</div>
+                        <div class="subject-code">UEF313</div>
+                    </div>
+                    <div class="hours-info">
+                        <div class="hour-item">Cours: 1h30</div>
+                        <div class="hour-item">TD: 1h30</div>
+                        <div class="hour-item">TP: 0h</div>
+                    </div>
+                    <div class="selection-options">
+                        <div class="priority-container" onclick="togglePriority(this, 'Probabilités - Cours')">
+                            <label class="checkbox-label">Cours</label>
+                            <select class="priority-select" onclick="event.stopPropagation()">
+                                <option value="">--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="priority-container" onclick="togglePriority(this, 'Probabilités - TD')">
+                            <label class="checkbox-label">TD</label>
+                            <select class="priority-select" onclick="event.stopPropagation()">
+                                <option value="">--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Résumé des sélections -->
+            <div class="summary">
+                <h3>📊 Vos choix par ordre de priorité</h3>
+                <div class="counter" id="selectionCounter">0 choix sélectionnés</div>
+                <div class="priority-list" id="priorityList"></div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    📤 Soumettre ma sélection avec priorités
+                </button>
+                
+                <div class="loading" id="loading">
+                    <div class="loader"></div>
+                    <p>Envoi en cours...</p>
+                </div>
+                
+                <div class="success-message" id="successMessage">
+                    ✅ Votre sélection avec priorités a été enregistrée !
+                </div>
+                
+                <div class="error-message" id="errorMessage">
+                    ❌ Erreur lors de l'envoi. Veuillez réessayer.
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Configuration
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGj2qFFhQhbRY6kjVDsvXgmwgREe4XBJWGzhpr5pMlkYNMqd3JjEw_DbeeXP34mTfP/exec';
+        
+        let selectedPriorities = new Map(); // Map<string, number> pour stocker matière -> priorité
+
+        function togglePriority(container, subject) {
+            const select = container.querySelector('.priority-select');
+            
+            // Si on clique sur le container mais pas sur le select, ouvrir le select
+            if (document.activeElement !== select) {
+                select.focus();
+                select.click();
+            }
+        }
+
+        // Gérer les changements de priorité
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('priority-select')) {
+                const container = e.target.closest('.priority-container');
+                const subject = container.onclick.toString().match(/'([^']+)'/)[1];
+                const priority = e.target.value;
+                
+                if (priority === '') {
+                    // Retirer la sélection
+                    selectedPriorities.delete(subject);
+                    container.classList.remove('selected');
+                } else {
+                    // Ajouter/modifier la sélection
+                    selectedPriorities.set(subject, parseInt(priority));
+                    container.classList.add('selected');
+                }
+                
+                updatePrioritySummary();
+            }
+        });
+
+        function updatePrioritySummary() {
+            const counter = document.getElementById('selectionCounter');
+            const list = document.getElementById('priorityList');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            const count = selectedPriorities.size;
+            counter.textContent = `${count} choix sélectionnés`;
+            
+            // Trier par priorité
+            const sortedEntries = Array.from(selectedPriorities.entries())
+                .sort((a, b) => a[1] - b[1]); // Trier par priorité (1 = plus important)
+            
+            list.innerHTML = '';
+            sortedEntries.forEach(([subject, priority]) => {
+                const div = document.createElement('div');
+                div.className = 'priority-item';
+                div.innerHTML = `
+                    <span>${subject}</span>
+                    <span class="priority-badge priority-${priority}">Priorité ${priority}</span>
+                `;
+                list.appendChild(div);
+            });
+            
+            // Activer le bouton si au moins 3 choix
+            submitBtn.disabled = count < 3;
+        }
+
+        // Gestion du formulaire
+        document.getElementById('selectionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const teacherName = document.getElementById('teacherName').value.trim();
+            const teacherEmail = document.getElementById('teacherEmail').value.trim();
+            
+            // Validations
+            if (!teacherName || !teacherEmail) {
+                showMessage('error', 'Veuillez remplir tous les champs obligatoires.');
+                return;
+            }
+            
+            if (!isValidEmail(teacherEmail)) {
+                showMessage('error', 'Veuillez entrer un email valide.');
+                return;
+            }
+            
+            if (selectedPriorities.size < 3) {
+                showMessage('error', 'Veuillez sélectionner au moins 3 choix avec leurs priorités.');
+                return;
+            }
+            
+            // Afficher le loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            
+            try {
+                // Préparer les sélections avec priorités
+                const selectionsWithPriority = Array.from(selectedPriorities.entries())
+                    .sort((a, b) => a[1] - b[1]) // Trier par priorité
+                    .map(([subject, priority]) => ({
+                        subject: subject,
+                        priority: priority
+                    }));
+                
+                const formData = {
+                    timestamp: new Date().toISOString(),
+                    teacherName: teacherName,
+                    teacherEmail: teacherEmail,
+                    selections: selectionsWithPriority.map(item => `${item.subject} (Priorité ${item.priority})`),
+                    selectionsWithPriority: selectionsWithPriority,
+                    totalSelections: selectedPriorities.size
+                };
+                
+                console.log('📦 Données avec priorités:', formData);
+                
+                // Envoyer les données
+                const response = await sendWithJSON(formData);
+                
+                if (response.success) {
+                    showMessage('success', '✅ Vos choix avec priorités ont été enregistrés !');
+                    resetForm();
+                } else {
+                    throw new Error(response.message || 'Erreur inconnue');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erreur:', error);
+                showMessage('error', `❌ Erreur lors de l'envoi: ${error.message}`);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+            }
+        });
+
+        // Fonction d'envoi (simplifiée)
+        async function sendWithJSON(data) {
+            try {
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.text();
+                console.log('📨 Réponse:', result);
+                
+                try {
+                    return JSON.parse(result);
+                } catch {
+                    if (result.includes('success') || response.ok) {
+                        return { success: true, message: 'Données envoyées' };
+                    }
+                    return { success: false, error: 'Réponse invalide' };
+                }
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function showMessage(type, message) {
+            const successEl = document.getElementById('successMessage');
+            const errorEl = document.getElementById('errorMessage');
+            
+            successEl.style.display = 'none';
+            errorEl.style.display = 'none';
+            
+            if (type === 'success') {
+                successEl.innerHTML = message;
+                successEl.style.display = 'block';
+                successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                errorEl.innerHTML = message;
+                errorEl.style.display = 'block';
+                errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function resetForm() {
+            // Reset toutes les sélections
+            document.querySelectorAll('.priority-select').forEach(select => {
+                select.value = '';
+            });
+            document.querySelectorAll('.priority-container').forEach(container => {
+                container.classList.remove('selected');
+            });
+            
+            // Reset les champs texte
+            document.getElementById('teacherName').value = '';
+            document.getElementById('teacherEmail').value = '';
+            
+            // Reset les données
+            selectedPriorities.clear();
+            updatePrioritySummary();
+            
+            // Cacher les messages après 5 secondes
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+                document.getElementById('errorMessage').style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
